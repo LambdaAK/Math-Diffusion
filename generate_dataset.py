@@ -57,8 +57,8 @@ def main() -> int:
     parser.add_argument(
         "--max-length",
         type=int,
-        default=50,
-        help="Maximum expression length in characters (default: 50)",
+        default=100,
+        help="Maximum expression length in characters (default: 100)",
     )
     parser.add_argument(
         "--seed",

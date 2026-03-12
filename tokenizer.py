@@ -10,9 +10,10 @@ from grammar import VARIABLES, FUNCTIONS, DIGITS
 # Characters used by the grammar
 OPERATORS = "+-*/^"
 PARENS = "()"
+SPACE = " "
 
 # All characters that can appear in valid expressions
-_CHARS = set(DIGITS) | set(OPERATORS) | set(PARENS) | set(VARIABLES)
+_CHARS = set(DIGITS) | set(OPERATORS) | set(PARENS) | set(VARIABLES) | {SPACE}
 for f in FUNCTIONS:
     _CHARS.update(f)
 

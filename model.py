@@ -39,9 +39,9 @@ class DenoisingTransformer(nn.Module):
     def __init__(
         self,
         vocab_size: int = VOCAB_SIZE,
-        d_model: int = 128,
-        n_heads: int = 4,
-        n_layers: int = 4,
+        d_model: int = 512,
+        n_heads: int = 8,
+        n_layers: int = 12,
         max_len: int = 64,
         dropout: float = 0.1,
     ):

@@ -2,11 +2,12 @@
 Formal grammar for mathematical expressions.
 
 Produces valid expressions such as:
-    (x+2)*y
-    sin(x)+3
-    (x^2+1)/(y-4)
-    log(x)+sqrt(x+1)
+    (x + 2) * y
+    sin(x) + 3
+    (x ^ 2 + 1) / (y - 4)
+    log(x) + sqrt(x + 1)
 
+Removes redundant parentheses (e.g. (y) -> y, (3) -> 3) and adds spaces around operators.
 Grammar (operator precedence: +,- < *,/ < ^):
     expr   := term (('+' | '-') term)*
     term   := factor (('*' | '/') factor)*
@@ -18,6 +19,7 @@ Grammar (operator precedence: +,- < *,/ < ^):
     func   := 'sin' | 'cos' | 'tan' | 'log' | 'sqrt' | 'exp'
 """
 
+import re
 import random
 from typing import Optional
 
@@ -48,12 +50,36 @@ def _random_func() -> str:
     return random.choice(FUNCTIONS)
 
 
+def remove_redundant_parens(expr: str) -> str:
+    """Remove parentheses around single variables or numbers, e.g. (y) -> y, (3) -> 3.
+    Preserves function args: sin(x) stays sin(x), not sinx."""
+    while True:
+        # Only remove (X) when not immediately after a letter (function name)
+        new = re.sub(r"(?<![a-z])\(([xyz]|\d+)\)", r"\1", expr)
+        if new == expr:
+            break
+        expr = new
+    return expr
+
+
+def add_spaces(expr: str) -> str:
+    """Add spaces around binary operators: + - * / ^."""
+    for op in ["+", "-", "*", "/", "^"]:
+        expr = expr.replace(op, f" {op} ")
+    return " ".join(expr.split())  # collapse multiple spaces
+
+
+def format_expr(expr: str) -> str:
+    """Remove redundant parens and add spaces around operators."""
+    return add_spaces(remove_redundant_parens(expr))
+
+
 def generate_expr(
     max_depth: int = 3,
     max_add_terms: int = 2,
     max_mul_factors: int = 2,
     number_max_digits: int = 1,
-    max_length: Optional[int] = 50,
+    max_length: Optional[int] = 100,
     rng: Optional[random.Random] = None,
 ) -> str:
     """
@@ -114,10 +140,10 @@ def generate_expr(
         return r.choice(choices)()
 
     for _ in range(500):
-        result = expr(max_depth)
+        result = format_expr(expr(max_depth))
         if max_length is None or len(result) <= max_length:
             return result
-    return expr(max_depth)
+    return format_expr(expr(max_depth))
 
 
 def generate_dataset(
@@ -127,7 +153,7 @@ def generate_dataset(
     max_add_terms: int = 2,
     max_mul_factors: int = 2,
     number_max_digits: int = 1,
-    max_length: Optional[int] = 50,
+    max_length: Optional[int] = 100,
     seed: Optional[int] = None,
     deduplicate: bool = True,
 ) -> list[str]:
