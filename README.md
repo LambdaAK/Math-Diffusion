@@ -63,19 +63,6 @@ python sample.py --checkpoint checkpoints/model_large.pt --num 20 --temperature 
 python sample.py --checkpoint checkpoints/model_large.pt --num 20 --temperature 0
 ```
 
-## Project Structure
-
-| File | Description |
-|------|-------------|
-| `grammar.py` | Formal grammar, expression generation, redundant paren removal, spacing |
-| `tokenizer.py` | Character-level tokenizer (vocab: operators, digits, variables, functions, space, [PAD], [MASK]) |
-| `diffusion.py` | Corruption process (linear/cosine schedule, MASK + random replacement) |
-| `model.py` | DenoisingTransformer (encoder-only, timestep embedding) |
-| `train.py` | Training loop (DataLoader, AMP, cosine warm restarts) |
-| `sample.py` | Iterative denoising from all-MASK |
-| `generate_dataset.py` | CLI for generating expression datasets |
-| `watch_corruption.py` | Visualize corruption across timesteps |
-
 ## Example Outputs
 
 After training, the model generates expressions like:

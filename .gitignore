@@ -2,3 +2,5 @@ data/
 __pycache__/
 checkpoints/
 .pytest_cache/
+Old model/
+*.pt
